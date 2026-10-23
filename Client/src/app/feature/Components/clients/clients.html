@@ -1,0 +1,229 @@
+<div class="card" *ngIf="IsDefaultView">
+  <div class="card-header d-flex justify-content-between align-items-center bg-secondary">
+
+    <span class="fw-bold text-white">
+      {{ gridConfiguration.gridTitle }}
+    </span>
+
+    <div class="d-flex align-items-center gap-2">
+
+      <input type="text" class="form-control form-control-sm" style="width: 220px;" placeholder="Search farmers..."
+        (input)="onSearch($event)" />
+
+      <button type="button" class="btn btn-sm btn-primary" *ngIf="canAdd" (click)="OpenForm()">
+        <i class="bi bi-plus-lg me-1"></i>
+        Add
+      </button>
+
+    </div>
+  </div>
+
+  <div class="d-none d-md-block" *ngIf="canView">
+    <app-common-ag-grid [gridConfiguration]="gridConfiguration" [recordCount]="totalCount" (gridEvent)="onGridEvent($event)">
+    </app-common-ag-grid>
+  </div>
+
+  <div class="d-md-none">
+
+    <div class="card mb-3 shadow-sm" *ngFor="let item of gridData">
+
+      <div class="card-body">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-start mb-3">
+
+          <div>
+            <h6 class="mb-1 fw-bold">
+              {{ item.clientCode }}
+            </h6>
+
+            <small class="text-muted">
+             {{ item.firstName }} {{ item.lastName }}
+            </small>
+          </div>
+
+          <div class="row g-3">
+
+            <div class="col-12">
+              <small class="text-muted d-block">
+                Client Type
+              </small>
+
+              <span>
+                {{ item.clientType }}
+              </span>
+            </div>
+
+            <div class="col-12">
+              <small class="text-muted d-block">
+                Email
+              </small>
+
+              <span>
+                {{ item.email }}
+              </span>
+            </div>
+
+            <div class="col-12">
+              <small class="text-muted d-block">
+                Mobile
+              </small>
+
+              <span>
+                {{ item.mobile }}
+              </span>
+            </div>
+
+          </div>
+
+          <hr>
+
+          <!-- Actions -->
+
+          <div class="d-flex flex-column">
+
+            <button class="btn btn-outline-primary btn-sm" (click)="Edit(item.recordId)">
+              Edit
+            </button>             
+            <br>
+            <button class="btn btn-outline-danger btn-sm" (click)="Delete(item.recordId)">
+              Delete
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+
+  </div>
+</div>
+
+<div class="card" *ngIf="!IsDefaultView">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span class="fw-bold">{{HeaderText}}</span>
+    <button type="button" class="btn btn-sm btn-primary" (click)="toggleIsDefaultView()">X</button>
+  </div>
+  <div class="card-body">
+
+
+    <form [formGroup]="clientForm">
+
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-6">
+          <div class="mb-3">
+            <label>First Name</label>
+            <input type="text" class="form-control" formControlName="firstname" />
+            <!-- <small class="text-danger" *ngIf="clientForm.firstname.touched && clientForm.firstname.invalid">
+              First Name is required
+            </small> -->
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6">
+          <div class="mb-3">
+            <label>Last Name</label>
+            <input type="text" class="form-control" formControlName="lastname" />
+            <!-- <small class="text-danger" *ngIf="clientForm.lastname.touched && clientForm.lastname.invalid">
+              Last Name is required
+            </small> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-6">
+          <div class="mb-3">
+            <label>Email</label>
+            <input type="email" class="form-control" formControlName="email" />
+            <!-- <small class="text-danger" *ngIf="form.email.touched && form.email.invalid">
+              Valid Email is required
+            </small> -->
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6">
+          <div class="mb-3">
+            <label>Farmer Code</label>
+            <input type="text" class="form-control" (input)="convertToUpperCase($event)" formControlName="clientCode" />
+            <!-- <small class="text-danger" *ngIf="form.clientCode.touched && form.clientCode.invalid">
+              Farmer Code must be a number
+            </small> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-6">
+          <div class="mb-3">
+            <label>Category</label>
+            <input type="text" class="form-control" formControlName="category" />
+            <!-- <small class="text-danger" *ngIf="form.category.touched && form.category.invalid">
+              Category is required
+            </small> -->
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6">
+          <div class="mb-3">
+            <label>Farmer Type</label>
+            <input type="text" class="form-control" formControlName="clientType" />
+            <!-- <small class="text-danger" *ngIf="clientForm.clientType.touched && clientForm.clientType.invalid">
+              Farmer Type is required
+            </small> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-6">
+          <div class="mb-3">
+            <label>Mobile</label>
+            <input type="tel" class="form-control" formControlName="mobile" />
+            <!-- <small class="text-danger" *ngIf="form.mobile.touched && form.mobile.invalid">
+              Mobile number is required
+            </small> -->
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6">
+          <div class="mb-3">
+            <label>Alternate Mobile</label>
+            <input type="tel" class="form-control" formControlName="alternateMobile" />
+            <!-- <small class="text-danger" *ngIf="form.alternateMobile.touched && form.alternateMobile.invalid">
+              Alternate Mobile number is required
+            </small> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="mb-3">
+                <label>Address</label>
+                <input type="text" class="form-control" formControlName="address" />
+                <!-- <small class="text-danger" *ngIf="form.address.touched && form.address.invalid">
+                Address is required
+                </small> -->
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-6 col-lg-6">
+          <div class="form-check mb-2">
+            <input class="form-check-input selected" type="checkbox" formControlName="isActive" />
+            <label class="form-check-label">Is Active</label>
+          </div>
+
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" formControlName="isDeleted" />
+            <label class="form-check-label">Is Deleted</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="" *ngIf="ButtonText == 'Insert'">
+        <button class="btn btn-primary" (click)="Insert()">{{ButtonText}}</button>
+      </div>
+
+      <div class="" *ngIf="ButtonText == 'Update'">
+        <button class="btn btn-primary" (click)="Update()">{{ButtonText}}</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,197 @@
+<main class="container-fluid min-vh-100 bg-body-tertiary p-0">
+  <div class="row g-0 min-vh-100">
+    <section
+      class="col-lg-5 d-none d-lg-flex flex-column justify-content-between bg-primary bg-gradient text-white p-5"
+      aria-label="Welcome"
+    >
+      <a class="d-inline-flex align-items-center gap-2 text-white text-decoration-none" href="#"
+        (click)="$event.preventDefault()">
+        <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-white text-primary p-2">
+          <i class="bi bi-grid-1x2-fill" aria-hidden="true"></i>
+        </span>
+        <span class="fs-4 fw-bold">DMS<span class="text-info">.</span></span>
+      </a>
+
+      <div>
+        <p class="small fw-semibold text-uppercase mb-3">
+          <!-- <span class="badge bg-success rounded-circle p-1 me-2" aria-hidden="true">&nbsp;</span> -->
+          Your workspace, in one place
+        </p>
+        <h2 class="display-5 fw-semibold mb-3">
+          {{ isLoginView ? 'Good to see you again.' : isForgotPasswordView ? 'Let’s get you back in.' : 'A better way to work together.' }}
+        </h2>
+        <p class="lead text-white mb-0">
+          {{ isLoginView
+            ? 'Sign in to pick up where you left off and keep everything moving.'
+            : isForgotPasswordView
+              ? 'A few quick steps and you’ll be right back to your workspace.'
+              : 'Create your account and bring your team, tools, and work together.' }}
+        </p>
+      </div>
+
+      <p class="small text-white-50 mb-0">© {{ currentYear }} DMS. Built for better work.</p>
+    </section>
+
+    <section class="col-12 col-lg-7 d-flex align-items-center justify-content-center p-4 p-sm-5">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-10 col-xl-7">
+            <a class="d-lg-none d-inline-flex align-items-center gap-2 text-primary text-decoration-none mb-5"
+              href="#" (click)="$event.preventDefault()">
+              <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-primary text-white p-2">
+                <i class="bi bi-grid-1x2-fill" aria-hidden="true"></i>
+              </span>
+              <span class="fs-4 fw-bold">DMS<span class="text-info">.</span></span>
+            </a>
+
+            <div *ngIf="isLoginView">
+              <div class="mb-4">
+                <h2 class="h3 fw-bold mt-2 mb-2">Sign in to your account</h2>
+                <p class="text-secondary mb-0">Enter your details below to continue.</p>
+              </div>
+
+              <form #loginForm="ngForm" (ngSubmit)="onLogin()">
+                <div class="alert alert-primary d-flex align-items-start gap-3 mb-4" role="note">
+                  <span class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white flex-shrink-0 p-2" aria-hidden="true">
+                    <i class="bi bi-shield-lock"></i>
+                  </span>
+                  <p class="mb-0 small">
+                    Sign in with your email and password, or choose a one-time code.
+                  </p>
+                </div>
+
+                <div class="mb-4">
+                  <label for="useremail" class="form-label fw-semibold">Email address</label>
+                  <div class="input-group">
+                    <span class="input-group-text" aria-hidden="true"><i class="bi bi-envelope"></i></span>
+                    <input id="useremail" type="email" class="form-control" [(ngModel)]="loginModel.useremail"
+                      name="useremail" required autocomplete="email" placeholder="you@example.com" />
+                  </div>
+                </div>
+
+                <fieldset class="mb-4">
+                  <!-- <legend class="form-label">Choose a sign-in method</legend> -->
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <input type="radio" class="btn-check" name="LoginType" id="IsPassword"
+                        [checked]="IsPasswordEnabled && !isOTPEnabled" (change)="IsChecked($event, 'IsPassword')" />
+                      <label class="btn btn-outline-primary w-100 h-100 text-start" for="IsPassword">
+                        <i class="bi bi-key me-2" aria-hidden="true"></i>Password
+                      </label>
+                    </div>
+                    <div class="col-6">
+                      <input type="radio" class="btn-check" name="LoginType" id="IsOtp"
+                        [checked]="isOTPEnabled && !IsPasswordEnabled" (change)="IsChecked($event, 'IsOtp')" />
+                      <label class="btn btn-outline-primary w-100 h-100 text-start" for="IsOtp">
+                        <i class="bi bi-chat-square-dots me-2" aria-hidden="true"></i>One-time code
+                      </label>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <div *ngIf="IsPasswordEnabled && !isOTPEnabled" class="mb-3">
+                  <label for="password" class="form-label fw-semibold">Password</label>
+                  <div class="input-group">
+                    <span class="input-group-text" aria-hidden="true"><i class="bi bi-lock"></i></span>
+                    <input id="password" class="form-control"
+                      [type]="showPassword ? 'text' : 'password'" [(ngModel)]="loginModel.password" name="password"
+                      required minlength="6" autocomplete="current-password" placeholder="Enter your password" />
+                    <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()"
+                      [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+                      [attr.aria-pressed]="showPassword">
+                      <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div *ngIf="IsPasswordEnabled && !isOTPEnabled" class="text-end mb-4">
+                  <a href="#" class="link-primary fw-semibold"
+                    (click)="openForgotPassword(); $event.preventDefault()">Forgot password?</a>
+                </div>
+
+                <div *ngIf="isOTPEnabled && !IsPasswordEnabled" class="alert alert-light border mb-4">
+                  <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
+                    <div>
+                      <p class="fw-semibold mb-1">Get a one-time code</p>
+                      <p class="text-secondary small mb-0">We’ll send a secure code to your email.</p>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary flex-shrink-0" (click)="SendOTP()">
+                      <i class="bi bi-send me-2" aria-hidden="true"></i>Send code
+                    </button>
+                  </div>
+                  <p class="text-success small mt-3 mb-0" *ngIf="OTPSendMessage !== ''" role="status">
+                    <i class="bi bi-check-circle-fill me-1" aria-hidden="true"></i>{{ OTPSendMessage }}
+                  </p>
+                  <div class="row g-2 mt-2">
+                    <div class="col-12 col-sm-8">
+                      <label for="otp" class="visually-hidden">One-time code</label>
+                      <input id="otp" type="text" inputmode="numeric" autocomplete="one-time-code"
+                        class="form-control" [(ngModel)]="OTP" name="otp" required minlength="6"
+                        maxlength="6" placeholder="Enter 6-digit code" />
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <button type="button" class="btn btn-primary w-100" (click)="VerifyOTP()">
+                        Verify code
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center gap-2"
+                  [disabled]="loginForm.invalid || !IsPasswordEnabled || isOTPEnabled"
+                  *ngIf="IsPasswordEnabled && !isOTPEnabled">
+                  <span>Sign in</span>
+                  <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                </button>
+
+                <!-- <p class="text-secondary small mt-3 mb-0 text-center">
+                  <i class="bi bi-shield-check text-success me-1" aria-hidden="true"></i>
+                  Your information is encrypted and secure.
+                </p> -->
+
+                <div class="d-flex align-items-center gap-3 my-4">
+                  <hr class="flex-grow-1 my-0" />
+                  <span class="small fw-semibold text-secondary text-nowrap">NEW TO DMS?</span>
+                  <hr class="flex-grow-1 my-0" />
+                </div>
+                <p class="text-center text-secondary mb-0">
+                  Create an account
+                  <a href="#" class="link-primary fw-semibold ms-1"
+                    (click)="openSignup(); $event.preventDefault()">Get started</a>
+                </p>
+              </form>
+            </div>
+
+            <div *ngIf="!isLoginView && !isForgotPasswordView">
+              <div class="mb-4">
+                <span class="small fw-semibold text-primary text-uppercase">Get started</span>
+                <h2 class="h3 fw-bold mt-2 mb-2">Create your account</h2>
+                <p class="text-secondary mb-0">A few details and you’re on your way.</p>
+              </div>
+              <app-sign-up [userConfiguration]="userConfiguration"></app-sign-up>
+              <p class="text-center text-secondary mt-4 mb-0">
+                Already have an account?
+                <a href="#" class="link-primary fw-semibold ms-1"
+                  (click)="isLoginView = true; $event.preventDefault()">Sign in</a>
+              </p>
+            </div>
+
+            <div *ngIf="isForgotPasswordView">
+              <div class="mb-4">
+                <span class="small fw-semibold text-primary text-uppercase">Account recovery</span>
+                <h2 class="h3 fw-bold mt-2 mb-2">Reset your password</h2>
+                <p class="text-secondary mb-0">Enter your email and we’ll help you get back in.</p>
+              </div>
+              <app-forgot-password-component />
+              <p class="text-center text-secondary small mt-4 mb-0">
+                Remembered your password?
+                <a href="#" class="link-primary fw-semibold ms-1"
+                  (click)="isForgotPasswordView = false; isLoginView = true; $event.preventDefault()">Back to sign in</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
