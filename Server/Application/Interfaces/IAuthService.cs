@@ -5,6 +5,8 @@ namespace Server.Application.Interfaces
 {
     public interface IAuthService
     {
-        Task<LoginResponse> Login(Login login);
+        public Task<LoginResponse> Login(Login login);
+
+        public Task<Response> SendResetPassword(String Email);
     }
 }

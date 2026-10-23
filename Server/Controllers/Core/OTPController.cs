@@ -45,7 +45,8 @@ namespace Server.Controllers.Core
 
             if (saveOTPResponse.IsSuccess)
             {
-                emailRequest.Body = emailRequest.Body + " " + otp;
+                emailRequest.Body = emailRequest.Body;
+                emailRequest.MyValue = otp.ToString();
                 await _emailService.SendEmailAsync(emailRequest);
 
                 response.IsSuccess = true;

@@ -1,7 +1,9 @@
-﻿using Server.Domain.Models.Core;
-using Server.Infrastructure.DAL.Interfaces;
-using Dapper;
+﻿using Dapper;
+using DMS.Server.Domain.Entities.Core;
 using Microsoft.Data.SqlClient;
+using Server.Domain.Entities.Core;
+using Server.Domain.Models.Core;
+using Server.Infrastructure.DAL.Interfaces;
 using System.Data;
 using System.Security.Cryptography;
 using System.Text;
@@ -70,6 +72,24 @@ namespace Server.Infrastructure.DAL
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
+        }
+
+        public async Task<Response> InsertResetPassword(PasswordResetToken model)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@value1", "Insert");
+                parameters.Add("@recordId", model.RecordId);
+
+                var data = await connection.ExecuteScalarAsync<int>(
+                    "USP_ResetPasswordToken",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+
+                return new Response { IsSuccess = data > 0 };
+            }
         }
     }
 }

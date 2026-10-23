@@ -1,9 +1,10 @@
-﻿using Server.Application.DTOs;
+﻿using MailKit.Security;
+using MimeKit;
+using Server.Application.DTOs;
 using Server.Application.Interfaces;
 using Server.Domain.Entities.Core;
 using Server.Infrastructure.DAL.Interfaces;
-using MailKit.Security;
-using MimeKit;
+using static System.Net.WebRequestMethods;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace Server.Application.Services.Core
@@ -46,9 +47,11 @@ namespace Server.Application.Services.Core
             email.To.Add(MailboxAddress.Parse(emailRequest.ToEmail));
             email.Subject = emailRequest.Subject;
 
-            email.Body = new TextPart("plain")
+            var body = emailRequest.Body.Replace("{otp}", emailRequest.MyValue);
+
+            email.Body = new TextPart("html")
             {
-                Text = emailRequest.Body
+                Text = body
             };
 
             using var smtp = new SmtpClient();

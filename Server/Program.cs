@@ -3,16 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Server.Application.Interfaces;
-using Server.Application.Services;
-using Server.Application.Services.Core;
-using Server.Application.Services.Feature;
 using Server.Domain.Middlewares;
 using Server.Infrastructure.Contexts;
-using Server.Infrastructure.DAL;
-using Server.Infrastructure.DAL.Interfaces;
-using Server.Infrastructure.Repositories;
-using Server.Infrastructure.Repositories.Interfaces;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);

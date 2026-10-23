@@ -1,4 +1,6 @@
-﻿using Server.Domain.Models.Core;
+﻿using DMS.Server.Domain.Entities.Core;
+using Server.Domain.Entities.Core;
+using Server.Domain.Models.Core;
 
 namespace Server.Infrastructure.DAL.Interfaces
 {
@@ -8,6 +10,8 @@ namespace Server.Infrastructure.DAL.Interfaces
         
         public Task<int> IsUserExist(string useremail);
 
-        public Task<LoginResponse> GetUserByEmail(string email);                
+        public Task<LoginResponse> GetUserByEmail(string email);           
+ 
+        public Task<Response> InsertResetPassword(PasswordResetToken model);
     }
 }

@@ -13,6 +13,7 @@ namespace Server.Controllers.Core
         {
             _authService = authService;
         }
+
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] Login login)
@@ -20,6 +21,21 @@ namespace Server.Controllers.Core
             try
             {
                 var response = await _authService.Login(login);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        [Route("SendResetPassword{Email}")]
+        public async Task<IActionResult> SendResetPassword(string Email)
+        {
+            try
+            {
+                var response = await _authService.SendResetPassword(Email);
                 return Ok(response);
             }
             catch (Exception ex)

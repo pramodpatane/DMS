@@ -1,4 +1,5 @@
-﻿using Server.Application.Interfaces;
+﻿using DMS.Server.Domain.Entities.Core;
+using Server.Application.Interfaces;
 using Server.Domain.Entities.Core;
 using Server.Domain.Models.Core;
 using Server.Infrastructure.DAL.Interfaces;
@@ -76,6 +77,69 @@ namespace Server.Application.Services.Core
 
                 return response;
 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Sends a password reset request for the specified email address. 
+        /// </summary>
+        /// <param name="Email">The email address of the user requesting a password reset. Cannot be null or empty.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a Response object indicating
+        /// whether the password reset request was successful. If the email is not registered or not verified, the
+        /// response will indicate failure with an appropriate message.</returns>
+        /// <exception cref="Exception">Thrown if an error occurs while processing the password reset request.</exception>
+        public async Task<Response> SendResetPassword(string Email)
+        {
+            try
+            {
+                var response = new Response();
+                var userExistRes = await _authDAL.IsUserExist(Email);
+
+                if (Convert.ToInt32(userExistRes) == 2)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "User EmailId is not verified.";
+                    return response;
+                }
+
+                else if (Convert.ToInt32(userExistRes) == 0)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Invalid email or password.";
+                    return response;
+                }
+
+                else if (Convert.ToInt32(userExistRes) == 1)
+                {
+                    PasswordResetToken model = new PasswordResetToken();
+                    response = await InsertResetPassword(model);
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Creates a reset password request for the specified login and returns the result of the operation.
+        /// </summary>
+        /// <param name="login">The login information for which to create a reset password request. Cannot be null.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a Response object indicating the
+        /// outcome of the reset password request.</returns>
+        /// <exception cref="Exception">Thrown if an error occurs while creating the reset password request.</exception>
+        public async Task<Response> InsertResetPassword(PasswordResetToken model)
+        {
+            try
+            {
+                var response = await _authDAL.InsertResetPassword(model);
+                return response;
             }
             catch (Exception ex)
             {

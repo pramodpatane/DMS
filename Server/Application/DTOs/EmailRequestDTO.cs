@@ -17,6 +17,7 @@ namespace Server.Application.DTOs
 
         [Required(ErrorMessage = "Body is required")]
         public string? Body { get; set; }
+        public string? MyValue { get; set; }
 
     }
 }
