@@ -13,11 +13,13 @@ import { DropdownModel } from '../../../auth/Models/dropdown.model';
 import { GridConfigurationModel } from '../../../core/Models/grid-configuration.model';
 import { CommonAgGrid } from '../../../core/Components/common-ag-grid/common-ag-grid';
 import { MenuPermissionsService } from '../../../core/Services/menu.permissions.service';
+import { Address } from '../address/address';
+import { AddressConfiguration } from '../../Models/address.model';
 
 @Component({
   selector: 'app-employees',
   imports: [ReactiveFormsModule, CommonModule, CommonAgGrid,
-    MatFormFieldModule, MatDatepickerModule, FormsModule],
+    MatFormFieldModule, MatDatepickerModule, FormsModule, Address],
   templateUrl: './employees.html',
   styleUrl: './employees.css',
 })
@@ -34,6 +36,7 @@ export class Employees implements OnInit {
   DepartmentsList: DropdownModel[] = [];
   //filterdata: FilterData = new FilterData();
   gridConfiguration: GridConfigurationModel = new GridConfigurationModel();
+  addressConfiguration: AddressConfiguration = new AddressConfiguration();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   firstDay: any;
   canView = false;
@@ -44,7 +47,9 @@ export class Employees implements OnInit {
   constructor(private swalservice: SwalService, private employeeService: EmployeeService, private cdr: ChangeDetectorRef,
     private formBuilder: FormBuilder, private departmentService: DepartmentService,
     private menuPermissionsState: MenuPermissionsService
-  ) { }
+  ) {
+    this.addressConfiguration.canHeaderView = false;
+   }
 
   ngOnInit() {
     this.GetActionPermissions();
@@ -70,9 +75,13 @@ export class Employees implements OnInit {
       recordId: [null],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
+      gender: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      mobile: ['', Validators.required],
       salary: [null, [Validators.required, Validators.min(0)]],
       departmentId: [null, Validators.required],
+      isWebLogin: ['No'],
       isActive: [true],
       isDeleted: [false]
     });
@@ -84,21 +93,21 @@ export class Employees implements OnInit {
     model.firstName = this.employeeForm.value.firstName;
     model.lastName = this.employeeForm.value.lastName;
     model.email = this.employeeForm.value.email;
+    model.mobile = this.employeeForm.value.mobile;
+    model.gender = this.employeeForm.value.gender;
+    model.dob = this.employeeForm.value.dateOfBirth;
     model.salary = this.employeeForm.value.salary;
     model.departmentId = this.employeeForm.value.departmentId;
-    model.isActive = this.employeeForm.value.isActive;
-    model.isDeleted = this.employeeForm.value.isDeleted;
 
-    model.departmentId = Number(model.departmentId);
     //console.log(model);
     return model;
   }
 
   public GetActionPermissions() {
-    this.canView = this.menuPermissionsState.canView('Milk Collection');
-    this.canAdd = this.menuPermissionsState.canAdd('Milk Collection');
-    this.canEdit = this.menuPermissionsState.canEdit('Milk Collection');
-    this.canDelete = this.menuPermissionsState.canDelete('Milk Collection');
+    this.canView = this.menuPermissionsState.canView('Employees');
+    this.canAdd = this.menuPermissionsState.canAdd('Employees');
+    this.canEdit = this.menuPermissionsState.canEdit('Employees');
+    this.canDelete = this.menuPermissionsState.canDelete('Employees');
   }
 
   public SetGridConfiguration() {
@@ -106,7 +115,8 @@ export class Employees implements OnInit {
       { field: 'firstName', width: 100, headerName: 'First Name', flex: 1, sortable: true, filter: true, resizable: true },
       { field: 'lastName', width: 100, headerName: 'Last Name', flex: 1, sortable: true, filter: true, resizable: true },
       { field: 'email', width: 300, headerName: 'Email', flex: 1, sortable: true, filter: true, resizable: true },
-      { field: 'salary', width: 100, headerName: 'Salary', flex: 1, sortable: true, filter: true, resizable: true },
+      { field: 'mobile', width: 100, headerName: 'Mobile', flex: 1, sortable: true, filter: true, resizable: true },
+      { field: 'dob', width: 150, headerName: 'Date of Birth', flex: 1, sortable: true, filter: true, resizable: true },
       { field: 'department', width: 100, headerName: 'Department', flex: 1, sortable: true, filter: true, resizable: true },
       { field: 'createdDate', width: 150, headerName: 'Created Date', flex: 1, sortable: true, filter: true, resizable: true }
     ];
@@ -154,7 +164,6 @@ export class Employees implements OnInit {
         },
 
         onCellClicked: (params: any) => {
-
           const target = params.event?.target as HTMLElement;
           const button = target.closest('button');
 
@@ -176,8 +185,7 @@ export class Employees implements OnInit {
     }
 
     this.gridConfiguration.gridColumns = columns;
-    this.gridConfiguration.gridTitle = 'Employee Master';
-    //this.gridConfiguration.gridFilter.pagesize = 20;
+    this.gridConfiguration.gridTitle = 'Employees';
   }
   
   onSearch(event: Event): void {
@@ -223,8 +231,8 @@ export class Employees implements OnInit {
             this.totalCount = response.totalCount;
             this.cdr.detectChanges();
           },
-          error: () => {
-            this.swalservice.ShowAlert("error", "");
+          error: (err) => {
+            this.swalservice.ShowAlert("error", err);
           }
         });
       //} ✅
@@ -239,12 +247,12 @@ export class Employees implements OnInit {
     try {
       let datamodel = this.ConvertFormToModel();
 
-      this.HeaderText = "Add Employee";
-      this.toggleIsDefaultView();
+      this.HeaderText = "Add Employee";      
       
        (await this.employeeService.InsertData(datamodel)).subscribe({
           next: (res) => {
             if(res == 1) {
+              this.toggleIsDefaultView();
               this.swalservice.ShowAlert("success", "Record Inserted Successfully!");
             }
             this.GetData();
@@ -273,8 +281,8 @@ export class Employees implements OnInit {
             }
             this.GetData();
           },
-          error: () => {
-            this.swalservice.ShowAlert("error", "");
+          error: (err) => {
+            this.swalservice.ShowAlert("error", err);
           }
         });
     }
@@ -283,62 +291,34 @@ export class Employees implements OnInit {
     }
   }
 
-  // public async Edit(recordId: string): Promise<void> {
-  //   try { 
-  //     this.HeaderText = "Edit Employee";
-  //     this.ButtonText= "Update";
-  //     this.IsDefaultView = true;
-      
-  //     const response = await this.employeeService.GetById(recordId); 
-  //       response.subscribe({ next: (response: any) => 
-  //       { 
-  //         //console.log('Employee response:', response); 
-  //         this.employeeForm.get('recordId')?.setValue(response.recordId);
-  //         this.employeeForm.get('firstName')?.setValue(response.firstName);
-  //         this.employeeForm.get('lastName')?.setValue(response.lastName);
-  //         this.employeeForm.get('email')?.setValue(response.email);
-  //         this.employeeForm.get('salary')?.setValue(response.salary);
-  //         this.employeeForm.get('departmentId')?.setValue(response.departmentId);
-  //         this.employeeForm.get('isActive')?.setValue(response.isActive);
-  //         this.employeeForm.get('isDeleted')?.setValue(response.isDeleted);
-  //         error: (error: any) => { 
-  //             console.error('Get employee failed:', error); 
-  //         } 
-  //       }
-  //     }); 
-  //   } 
-  //   catch (error) { 
-  //     console.error('Edit failed:', error); 
-  //   } 
-  // }
-  public Edit(recordId: string) {
-    try {
+  public async Edit(recordId: string): Promise<void> {
+    try { 
       this.HeaderText = "Edit Employee";
       this.ButtonText= "Update";
       
-      
-       this.employeeService.GetById(recordId).subscribe({
-          next: (res) => {            
-            let response = JSON.parse(JSON.stringify(res))
-            //console.log(response)
-            this.employeeForm.get('recordId')?.setValue(response.recordId);
-            this.employeeForm.get('firstName')?.setValue(response.firstName);
-            this.employeeForm.get('lastName')?.setValue(response.lastName);
-            this.employeeForm.get('email')?.setValue(response.email);
-            this.employeeForm.get('salary')?.setValue(response.salary);
-            this.employeeForm.get('departmentId')?.setValue(response.departmentId);
-            this.employeeForm.get('isActive')?.setValue(response.isActive);
-            this.employeeForm.get('isDeleted')?.setValue(response.isDeleted);
-            this.toggleIsDefaultView();
-          },
-          error: () => {
-            this.swalservice.ShowAlert("error", "");
-          }
-        });
-    }
-    catch(err){
-      throw err;
-    }
+      const response = await this.employeeService.GetById(recordId); 
+        response.subscribe({ next: (response: any) => 
+        { 
+          //console.log('Employee response:', response); 
+          this.employeeForm.get('recordId')?.setValue(response.recordId);
+          this.employeeForm.get('firstName')?.setValue(response.firstName);
+          this.employeeForm.get('lastName')?.setValue(response.lastName);
+          this.employeeForm.get('email')?.setValue(response.email);
+          this.employeeForm.get('mobile')?.setValue(response.mobile);
+          this.employeeForm.get('gender')?.setValue(response.gender);
+          this.employeeForm.get('dateOfBirth')?.setValue(response.dob);
+          this.employeeForm.get('salary')?.setValue(response.salary);
+          this.employeeForm.get('departmentId')?.setValue(response.departmentId);
+          this.employeeForm.get('isActive')?.setValue(response.isActive);
+          this.employeeForm.get('isDeleted')?.setValue(response.isDeleted);          
+          this.toggleIsDefaultView();
+          this.cdr.detectChanges();
+        }
+      }); 
+    } 
+    catch (error) { 
+      console.error('Edit failed:', error); 
+    } 
   }
 
   public async Delete(recordId: string) {

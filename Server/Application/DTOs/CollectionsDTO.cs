@@ -8,7 +8,7 @@ namespace Server.Application.DTOs
         public string ClientName{ get; set; }
         public DateTime CollectionDate { get; set; }
         public string CollectionTime { get; set; }
-        public string CollectionShift{ get; set; }
+        public string CollectionShift { get; set; }
         public string MilkType { get; set; }
         public Decimal Quantity { get; set; }
         public Guid UOM {  get; set; }	

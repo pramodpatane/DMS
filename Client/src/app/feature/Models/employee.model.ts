@@ -4,6 +4,10 @@ export class EmployeeModel {
     firstName: string = "";
     lastName: String = "";
     email: string = "";
+    mobile: string = "";
+    gender: string = "";
+    dob!: Date;
+    isWebLogin: boolean = false;
     salary!: number;
     departmentId!: number;
     isActive: boolean = true;
