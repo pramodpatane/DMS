@@ -1,4 +1,4 @@
-import { Component, effect, EventEmitter, input, Input, Output } from '@angular/core';
+import { Component, effect, EventEmitter, input, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { GridConfigurationModel } from '../../Models/grid-configuration.model';
 import { CommonModule } from '@angular/common';
@@ -12,8 +12,9 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   templateUrl: './common-ag-grid.html',
   styleUrl: './common-ag-grid.css',
 })
-export class CommonAgGrid {
+export class CommonAgGrid implements OnChanges {
   totalCount: number = 0;
+  totalPages: number = 0;
   @Input() gridConfiguration = new GridConfigurationModel();
   recordCount = input<number>(0);
   @Output() gridEvent = new EventEmitter<any>();
@@ -21,11 +22,18 @@ export class CommonAgGrid {
   constructor() {
     effect(() => {
       this.totalCount = this.recordCount();
+      this.updateTotalPages();
     });
   }
 
-  totalPages(): number {
-    return Math.ceil(
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['gridConfiguration']) {
+      this.updateTotalPages();
+    }
+  }
+
+  private updateTotalPages(): void {
+    this.totalPages = Math.ceil(
       this.totalCount / this.gridConfiguration.gridFilter.pagesize
     );
   }
@@ -51,7 +59,7 @@ export class CommonAgGrid {
   }
 
   goToNextPage(): void {
-    if (this.gridConfiguration.gridFilter.pageNumber >= this.totalPages()) {
+    if (this.gridConfiguration.gridFilter.pageNumber >= this.totalPages) {
       return;
     }
     this.gridConfiguration.gridFilter.pageNumber++;
@@ -61,10 +69,10 @@ export class CommonAgGrid {
   }
 
   goToLastPage(): void {
-    if (this.gridConfiguration.gridFilter.pageNumber === this.totalPages()) {
+    if (this.gridConfiguration.gridFilter.pageNumber === this.totalPages) {
       return;
     }
-    this.gridConfiguration.gridFilter.pageNumber = this.totalPages();
+    this.gridConfiguration.gridFilter.pageNumber = this.totalPages;
     this.gridConfiguration.gridFilter.skip = (this.gridConfiguration.gridFilter.pageNumber - 1) * this.gridConfiguration.gridFilter.pagesize;
 
     this.emitPageChange();
@@ -90,12 +98,13 @@ export class CommonAgGrid {
     this.gridConfiguration.gridFilter.pagesize = Number(select.value);
     // Usually go back to page 1
     this.gridConfiguration.gridFilter.pageNumber = 1;
+    this.updateTotalPages();
 
     this.emitPageChange();
   }
 
   nextPage(): void {
-    if (this.gridConfiguration.gridFilter.pageNumber < this.totalPages()) {
+    if (this.gridConfiguration.gridFilter.pageNumber < this.totalPages) {
       this.gridConfiguration.gridFilter.pageNumber++;
       this.gridConfiguration.gridFilter.skip = (this.gridConfiguration.gridFilter.pageNumber - 1) * this.gridConfiguration.gridFilter.pagesize;
       this.gridEvent.emit(this.gridConfiguration.gridFilter);

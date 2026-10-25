@@ -50,14 +50,14 @@
 
     <!-- Current Page -->
     <span class="px-2">
-      Page {{ gridConfiguration.gridFilter.pageNumber }} of {{ totalPages() }}
+      Page {{ gridConfiguration.gridFilter.pageNumber }} of {{ totalPages }}
     </span>
 
     <!-- Next -->
     <button
       type="button"
       class="btn btn-sm btn-outline-secondary"
-      [disabled]="gridConfiguration.gridFilter.pageNumber === totalPages()"
+      [disabled]="gridConfiguration.gridFilter.pageNumber === totalPages"
       (click)="goToNextPage()">
       <i class="bi bi-chevron-right"></i>
       
@@ -67,7 +67,7 @@
     <button
       type="button"
       class="btn btn-sm btn-outline-secondary"
-      [disabled]="gridConfiguration.gridFilter.pageNumber === totalPages()"
+      [disabled]="gridConfiguration.gridFilter.pageNumber === totalPages"
       (click)="goToLastPage()">
       <i class="bi bi-chevron-double-right"></i>
     </button>

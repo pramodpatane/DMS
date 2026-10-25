@@ -20,4 +20,22 @@ describe('Address', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render all address fields', () => {
+    const labels = Array.from(
+      fixture.nativeElement.querySelectorAll('label'),
+      (label: HTMLLabelElement) => label.textContent?.trim()
+    );
+
+    expect(labels).toEqual([
+      'Address Line 1',
+      'Address Line 2',
+      'Country',
+      'State',
+      'City',
+      'Pin Code',
+      'Latitude',
+      'Longitude'
+    ]);
+  });
 });

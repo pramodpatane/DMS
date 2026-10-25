@@ -111,10 +111,10 @@ export class Clients implements OnInit {
   }
 
   public GetActionPermissions() {
-    this.canView = this.menuPermissionsState.canView('Milk Collection');
-    this.canAdd = this.menuPermissionsState.canAdd('Milk Collection');
-    this.canEdit = this.menuPermissionsState.canEdit('Milk Collection');
-    this.canDelete = this.menuPermissionsState.canDelete('Milk Collection');
+    this.canView = this.menuPermissionsState.canView('Farmers');
+    this.canAdd = this.menuPermissionsState.canAdd('Farmers');
+    this.canEdit = this.menuPermissionsState.canEdit('Farmers');
+    this.canDelete = this.menuPermissionsState.canDelete('Farmers');
   }
 
   public SetGridConfiguration() {
@@ -250,8 +250,8 @@ export class Clients implements OnInit {
             this.totalCount = response.totalCount;
             this.cdr.detectChanges();
           },
-          error: () => {
-            this.swalService.ShowAlert("error", "");
+          error: (err) => {
+            this.swalService.ShowAlert("error", err);
           }
         });
       //} ✅
@@ -265,18 +265,18 @@ export class Clients implements OnInit {
     try {
       let datamodel = this.ConvertFormToModel();
 
-      this.HeaderText = "Add Farmer";
-      this.toggleIsDefaultView();
+      this.HeaderText = "Add Farmer";      
       
        (await this.clientsService.InsertData(datamodel)).subscribe({
           next: (res) => {
             if(res == 1) {
+              this.toggleIsDefaultView();
               this.swalService.ShowAlert("success", "Record Inserted Successfully!");
             }
             this.GetData();
           },
-          error: () => {
-            this.swalService.ShowAlert("error", "");
+          error: (error: any) => {
+            this.swalService.ShowAlert("error", error);
           }
         });
     }
@@ -298,8 +298,8 @@ export class Clients implements OnInit {
             }
             this.GetData();
           },
-          error: () => {
-            this.swalService.ShowAlert("error", "");
+          error: (error: any) => {
+            this.swalService.ShowAlert("error", error);
           }
         });
     }
@@ -312,30 +312,28 @@ export class Clients implements OnInit {
     try {
       this.HeaderText = "Edit Farmer";
       this.ButtonText= "Update"; 
-      //this.toggleIsDefaultView();  
       
-       (await this.clientsService.GetById(recordId)).subscribe({
-          next: (res) => {            
-            let response = JSON.parse(JSON.stringify(res))
-            //console.log(response)
-            this.IsDefaultView = true;  
-            this.clientForm.get('recordId')?.setValue(response.recordId);
-            this.clientForm.get('name')?.setValue(response.name);
-            this.clientForm.get('clientType')?.setValue(response.clientType);
-            this.clientForm.get('clientCode')?.setValue(response.clientCode);
-            this.clientForm.get('email')?.setValue(response.email);
-            this.clientForm.get('contactPerson')?.setValue(response.contactPerson);
-            this.clientForm.get('mobile')?.setValue(response.mobile);
-            this.clientForm.get('category')?.setValue(response.category);
-            this.clientForm.get('alternateMobile')?.setValue(response.alternateMobile);
-            this.clientForm.get('address')?.setValue(response.address);
-            this.clientForm.get('isActive')?.setValue(response.isActive);
-            this.clientForm.get('isDeleted')?.setValue(response.isDeleted);            
-          },
-          error: (err) => { 
-            this.swalService.ShowAlert("error", err);
-          }
-        });
+       const response = await this.clientsService.GetById(recordId); 
+        response.subscribe({ next: (response: any) => 
+        { 
+          //console.log(response)
+          this.clientForm.get('recordId')?.setValue(response.recordId);
+          this.clientForm.get('firstname')?.setValue(response.firstName);
+          this.clientForm.get('lastname')?.setValue(response.lastName);
+          this.clientForm.get('clientType')?.setValue(response.clientType);
+          this.clientForm.get('clientCode')?.setValue(response.clientCode);
+          this.clientForm.get('email')?.setValue(response.email);
+          this.clientForm.get('contactPerson')?.setValue(response.contactPerson);
+          this.clientForm.get('mobile')?.setValue(response.mobile);
+          this.clientForm.get('category')?.setValue(response.category);
+          this.clientForm.get('alternateMobile')?.setValue(response.alternateMobile);
+          this.clientForm.get('address')?.setValue(response.address);
+          this.clientForm.get('isActive')?.setValue(response.isActive);
+          this.clientForm.get('isDeleted')?.setValue(response.isDeleted); 
+          this.toggleIsDefaultView();
+          this.cdr.detectChanges();
+        }        
+      });
     }
     catch(err){
       throw err;

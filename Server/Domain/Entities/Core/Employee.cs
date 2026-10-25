@@ -13,6 +13,10 @@ namespace Server.Domain.Entities.Core
         [Required]
         public int Salary { get; set; }
         [Required]
-        public int DepartmentId { get; set; }        
+        public Guid DepartmentId { get; set; }
+
+        public string Gender { get; set; }
+        public string Mobile { get; set; }
+        public DateTime DOB { get; set; }
     }
 }

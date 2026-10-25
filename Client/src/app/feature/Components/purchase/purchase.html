@@ -1,19 +1,16 @@
-<div class="container-fluid py-3">
+<div class="container-fluid py-3" *ngIf="defaultView">
 
   <!-- Page Header -->
-  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 text-white bg-secondary rounded-3 p-3">
 
     <div>
       <h4 class="fw-semibold mb-1">Milk Purchase</h4>
-      <p class="text-secondary mb-0">
+      <p class="text-white mb-0">
         Manage milk purchases from farmers and suppliers
       </p>
     </div>
 
-    <button
-      type="button"
-      class="btn btn-primary d-flex align-items-center gap-2"
-      (click)="createNewPurchase()">
+    <button type="button" class="btn btn-primary d-flex align-items-center gap-2" (click)="toggleView()">
 
       <i class="bi bi-plus-lg"></i>
       New Purchase
@@ -181,476 +178,6 @@
 
   </div>
 
-
-  <!-- Purchase Entry -->
-  <div class="card border-0 shadow-sm mb-4">
-
-    <!-- Header -->
-    <div class="card-header bg-body border-0 py-3">
-
-      <div class="d-flex justify-content-between align-items-center">
-
-        <div>
-
-          <h5 class="fw-semibold mb-1">
-            Record Milk Purchase
-          </h5>
-
-          <small class="text-secondary">
-            Enter farmer and milk quality details
-          </small>
-
-        </div>
-
-        <span class="badge text-bg-success">
-          New Purchase
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <div class="card-body">
-
-      <!-- Basic Information -->
-      <div class="row g-3">
-
-        <!-- Farmer -->
-        <div class="col-lg-4">
-
-          <label class="form-label fw-medium">
-            Farmer / Supplier
-          </label>
-
-          <select class="form-select">
-
-            <option value="">
-              Select Farmer
-            </option>
-
-            <option>
-              Rajesh Patil - FRM1001
-            </option>
-
-            <option>
-              Suresh Jadhav - FRM1002
-            </option>
-
-            <option>
-              Amit Shinde - FRM1003
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <!-- Collection Center -->
-        <div class="col-lg-4">
-
-          <label class="form-label fw-medium">
-            Collection Center
-          </label>
-
-          <select class="form-select">
-
-            <option>
-              Main Collection Center
-            </option>
-
-            <option>
-              Pune Center
-            </option>
-
-            <option>
-              Hadapsar Center
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <!-- Purchase Date -->
-        <div class="col-lg-4">
-
-          <label class="form-label fw-medium">
-            Purchase Date
-          </label>
-
-          <input
-            type="date"
-            class="form-control">
-
-        </div>
-
-
-        <!-- Shift -->
-        <div class="col-lg-4">
-
-          <label class="form-label fw-medium">
-            Shift
-          </label>
-
-          <select class="form-select">
-
-            <option>
-              Morning
-            </option>
-
-            <option>
-              Evening
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <!-- Milk Type -->
-        <div class="col-lg-4">
-
-          <label class="form-label fw-medium">
-            Milk Type
-          </label>
-
-          <select class="form-select">
-
-            <option>
-              Cow Milk
-            </option>
-
-            <option>
-              Buffalo Milk
-            </option>
-
-            <option>
-              Mixed Milk
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <!-- Collection Time -->
-        <div class="col-lg-4">
-
-          <label class="form-label fw-medium">
-            Collection Time
-          </label>
-
-          <input
-            type="time"
-            class="form-control">
-
-        </div>
-
-      </div>
-
-
-      <!-- Milk Quality -->
-      <div class="border rounded-3 p-3 mt-4">
-
-        <div class="d-flex align-items-center gap-2 mb-3">
-
-          <i class="bi bi-droplet text-primary"></i>
-
-          <h6 class="fw-semibold mb-0">
-            Milk Quantity & Quality
-          </h6>
-
-        </div>
-
-
-        <div class="row g-3">
-
-          <!-- Quantity -->
-          <div class="col-lg-3 col-md-6">
-
-            <label class="form-label">
-              Quantity (Liters)
-            </label>
-
-            <div class="input-group">
-
-              <input
-                type="number"
-                class="form-control"
-                value="25">
-
-              <span class="input-group-text">
-                L
-              </span>
-
-            </div>
-
-          </div>
-
-
-          <!-- FAT -->
-          <div class="col-lg-3 col-md-6">
-
-            <label class="form-label">
-              FAT %
-            </label>
-
-            <div class="input-group">
-
-              <input
-                type="number"
-                step="0.01"
-                class="form-control"
-                value="4.2">
-
-              <span class="input-group-text">
-                %
-              </span>
-
-            </div>
-
-          </div>
-
-
-          <!-- SNF -->
-          <div class="col-lg-3 col-md-6">
-
-            <label class="form-label">
-              SNF %
-            </label>
-
-            <div class="input-group">
-
-              <input
-                type="number"
-                step="0.01"
-                class="form-control"
-                value="8.5">
-
-              <span class="input-group-text">
-                %
-              </span>
-
-            </div>
-
-          </div>
-
-
-          <!-- Temperature -->
-          <div class="col-lg-3 col-md-6">
-
-            <label class="form-label">
-              Temperature
-            </label>
-
-            <div class="input-group">
-
-              <input
-                type="number"
-                class="form-control"
-                value="5">
-
-              <span class="input-group-text">
-                °C
-              </span>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- Pricing -->
-      <div class="border rounded-3 p-3 mt-3">
-
-        <div class="d-flex align-items-center gap-2 mb-3">
-
-          <i class="bi bi-currency-rupee text-success"></i>
-
-          <h6 class="fw-semibold mb-0">
-            Purchase Pricing
-          </h6>
-
-        </div>
-
-
-        <div class="row g-3">
-
-          <!-- Rate -->
-          <div class="col-lg-4">
-
-            <label class="form-label">
-              Rate / Liter
-            </label>
-
-            <div class="input-group">
-
-              <span class="input-group-text">
-                ₹
-              </span>
-
-              <input
-                type="number"
-                class="form-control"
-                value="52">
-
-            </div>
-
-          </div>
-
-
-          <!-- Quantity -->
-          <div class="col-lg-4">
-
-            <label class="form-label">
-              Total Quantity
-            </label>
-
-            <div class="form-control bg-body-tertiary">
-              25 L
-            </div>
-
-          </div>
-
-
-          <!-- Total -->
-          <div class="col-lg-4">
-
-            <label class="form-label">
-              Total Amount
-            </label>
-
-            <div class="form-control bg-success-subtle text-success fw-bold">
-              ₹1,300
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- Payment -->
-      <div class="row g-3 mt-1">
-
-        <div class="col-lg-4">
-
-          <label class="form-label fw-medium">
-            Payment Status
-          </label>
-
-          <select class="form-select">
-
-            <option>
-              Paid
-            </option>
-
-            <option>
-              Pending
-            </option>
-
-            <option>
-              Partial
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="col-lg-4">
-
-          <label class="form-label fw-medium">
-            Payment Method
-          </label>
-
-          <select class="form-select">
-
-            <option>
-              Cash
-            </option>
-
-            <option>
-              UPI
-            </option>
-
-            <option>
-              Bank Transfer
-            </option>
-
-            <option>
-              Account Credit
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="col-lg-4">
-
-          <label class="form-label fw-medium">
-            Reference Number
-          </label>
-
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Transaction / reference no.">
-
-        </div>
-
-      </div>
-
-
-      <!-- Notes -->
-      <div class="mt-3">
-
-        <label class="form-label fw-medium">
-          Notes
-        </label>
-
-        <textarea
-          class="form-control"
-          rows="2"
-          placeholder="Enter notes if required"></textarea>
-
-      </div>
-
-    </div>
-
-
-    <!-- Footer -->
-    <div class="card-footer bg-body border-0 d-flex justify-content-end gap-2">
-
-      <button
-        type="button"
-        class="btn btn-light border">
-
-        Cancel
-
-      </button>
-
-      <button
-        type="button"
-        class="btn btn-primary d-flex align-items-center gap-2">
-
-        <i class="bi bi-check2"></i>
-
-        Save Purchase
-
-      </button>
-
-    </div>
-
-  </div>
-
-
   <!-- Recent Purchases -->
   <div class="card border-0 shadow-sm">
 
@@ -673,18 +200,14 @@
 
         <div class="d-flex gap-2">
 
-          <button
-            type="button"
-            class="btn btn-sm btn-outline-secondary">
+          <button type="button" class="btn btn-sm btn-outline-secondary">
 
             <i class="bi bi-download"></i>
             Export
 
           </button>
 
-          <button
-            type="button"
-            class="btn btn-sm btn-outline-primary">
+          <button type="button" class="btn btn-sm btn-outline-primary">
 
             View All
 
@@ -736,8 +259,7 @@
               <div class="d-flex align-items-center gap-2">
 
                 <div class="rounded-circle bg-primary-subtle text-primary
-                            d-flex align-items-center justify-content-center"
-                     style="width: 36px; height: 36px;">
+                            d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
 
                   RP
 
@@ -797,9 +319,7 @@
 
             <td class="text-end">
 
-              <button
-                type="button"
-                class="btn btn-sm btn-light">
+              <button type="button" class="btn btn-sm btn-light">
 
                 <i class="bi bi-three-dots"></i>
 
@@ -822,8 +342,7 @@
               <div class="d-flex align-items-center gap-2">
 
                 <div class="rounded-circle bg-success-subtle text-success
-                            d-flex align-items-center justify-content-center"
-                     style="width: 36px; height: 36px;">
+                            d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
 
                   SJ
 
@@ -883,9 +402,7 @@
 
             <td class="text-end">
 
-              <button
-                type="button"
-                class="btn btn-sm btn-light">
+              <button type="button" class="btn btn-sm btn-light">
 
                 <i class="bi bi-three-dots"></i>
 
@@ -908,8 +425,7 @@
               <div class="d-flex align-items-center gap-2">
 
                 <div class="rounded-circle bg-info-subtle text-info
-                            d-flex align-items-center justify-content-center"
-                     style="width: 36px; height: 36px;">
+                            d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
 
                   AS
 
@@ -969,9 +485,7 @@
 
             <td class="text-end">
 
-              <button
-                type="button"
-                class="btn btn-sm btn-light">
+              <button type="button" class="btn btn-sm btn-light">
 
                 <i class="bi bi-three-dots"></i>
 
@@ -1038,6 +552,443 @@
       </div>
 
     </div>
+
+  </div>
+
+</div>
+
+<!-- Purchase Entry -->
+<div class="card border-0 shadow-sm mb-4" *ngIf="!defaultView">
+
+  <!-- Header -->
+  <div class="card-header border-0 py-3 text-white bg-secondary rounded-3 p-2">
+
+    <div class="d-flex justify-content-between align-items-center">
+
+      <div>
+
+        <h5 class="fw-semibold mb-1">
+          Record Milk Purchase
+        </h5>
+
+        <small class="text-white">
+          Enter farmer and milk quality details
+        </small>
+
+      </div>
+
+      <span class="badge text-bg-success">
+        New Purchase
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <div class="card-body">
+
+    <!-- Basic Information -->
+    <div class="row g-3">
+
+      <!-- Farmer -->
+      <div class="col-lg-4">
+
+        <label class="form-label fw-medium">
+          Farmer / Supplier
+        </label>
+
+        <select class="form-select">
+
+          <option value="">
+            Select Farmer
+          </option>
+
+          <option>
+            Rajesh Patil - FRM1001
+          </option>
+
+          <option>
+            Suresh Jadhav - FRM1002
+          </option>
+
+          <option>
+            Amit Shinde - FRM1003
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- Collection Center -->
+      <div class="col-lg-4">
+
+        <label class="form-label fw-medium">
+          Collection Center
+        </label>
+
+        <select class="form-select">
+
+          <option>
+            Main Collection Center
+          </option>
+
+          <option>
+            Pune Center
+          </option>
+
+          <option>
+            Hadapsar Center
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- Purchase Date -->
+      <div class="col-lg-4">
+
+        <label class="form-label fw-medium">
+          Purchase Date
+        </label>
+
+        <input type="date" class="form-control">
+
+      </div>
+
+
+      <!-- Shift -->
+      <div class="col-lg-4">
+
+        <label class="form-label fw-medium">
+          Shift
+        </label>
+
+        <select class="form-select">
+
+          <option>
+            Morning
+          </option>
+
+          <option>
+            Evening
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- Milk Type -->
+      <div class="col-lg-4">
+
+        <label class="form-label fw-medium">
+          Milk Type
+        </label>
+
+        <select class="form-select">
+
+          <option>
+            Cow Milk
+          </option>
+
+          <option>
+            Buffalo Milk
+          </option>
+
+          <option>
+            Mixed Milk
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- Collection Time -->
+      <div class="col-lg-4">
+
+        <label class="form-label fw-medium">
+          Collection Time
+        </label>
+
+        <input type="time" class="form-control">
+
+      </div>
+
+    </div>
+
+
+    <!-- Milk Quality -->
+    <div class="border rounded-3 p-3 mt-4">
+
+      <div class="d-flex align-items-center gap-2 mb-3">
+
+        <i class="bi bi-droplet text-primary"></i>
+
+        <h6 class="fw-semibold mb-0">
+          Milk Quantity & Quality
+        </h6>
+
+      </div>
+
+
+      <div class="row g-3">
+
+        <!-- Quantity -->
+        <div class="col-lg-3 col-md-6">
+
+          <label class="form-label">
+            Quantity (Liters)
+          </label>
+
+          <div class="input-group">
+
+            <input type="number" class="form-control" value="25">
+
+            <span class="input-group-text">
+              L
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- FAT -->
+        <div class="col-lg-3 col-md-6">
+
+          <label class="form-label">
+            FAT %
+          </label>
+
+          <div class="input-group">
+
+            <input type="number" step="0.01" class="form-control" value="4.2">
+
+            <span class="input-group-text">
+              %
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- SNF -->
+        <div class="col-lg-3 col-md-6">
+
+          <label class="form-label">
+            SNF %
+          </label>
+
+          <div class="input-group">
+
+            <input type="number" step="0.01" class="form-control" value="8.5">
+
+            <span class="input-group-text">
+              %
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- Temperature -->
+        <div class="col-lg-3 col-md-6">
+
+          <label class="form-label">
+            Temperature
+          </label>
+
+          <div class="input-group">
+
+            <input type="number" class="form-control" value="5">
+
+            <span class="input-group-text">
+              °C
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Pricing -->
+    <div class="border rounded-3 p-3 mt-3">
+
+      <div class="d-flex align-items-center gap-2 mb-3">
+
+        <i class="bi bi-currency-rupee text-success"></i>
+
+        <h6 class="fw-semibold mb-0">
+          Purchase Pricing
+        </h6>
+
+      </div>
+
+
+      <div class="row g-3">
+
+        <!-- Rate -->
+        <div class="col-lg-4">
+
+          <label class="form-label">
+            Rate / Liter
+          </label>
+
+          <div class="input-group">
+
+            <span class="input-group-text">
+              ₹
+            </span>
+
+            <input type="number" class="form-control" value="52">
+
+          </div>
+
+        </div>
+
+
+        <!-- Quantity -->
+        <div class="col-lg-4">
+
+          <label class="form-label">
+            Total Quantity
+          </label>
+
+          <div class="form-control bg-body-tertiary">
+            25 L
+          </div>
+
+        </div>
+
+
+        <!-- Total -->
+        <div class="col-lg-4">
+
+          <label class="form-label">
+            Total Amount
+          </label>
+
+          <div class="form-control bg-success-subtle text-success fw-bold">
+            ₹1,300
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Payment -->
+    <div class="row g-3 mt-1">
+
+      <div class="col-lg-4">
+
+        <label class="form-label fw-medium">
+          Payment Status
+        </label>
+
+        <select class="form-select">
+
+          <option>
+            Paid
+          </option>
+
+          <option>
+            Pending
+          </option>
+
+          <option>
+            Partial
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="col-lg-4">
+
+        <label class="form-label fw-medium">
+          Payment Method
+        </label>
+
+        <select class="form-select">
+
+          <option>
+            Cash
+          </option>
+
+          <option>
+            UPI
+          </option>
+
+          <option>
+            Bank Transfer
+          </option>
+
+          <option>
+            Account Credit
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="col-lg-4">
+
+        <label class="form-label fw-medium">
+          Reference Number
+        </label>
+
+        <input type="text" class="form-control" placeholder="Transaction / reference no.">
+
+      </div>
+
+    </div>
+
+
+    <!-- Notes -->
+    <div class="mt-3">
+
+      <label class="form-label fw-medium">
+        Notes
+      </label>
+
+      <textarea class="form-control" rows="2" placeholder="Enter notes if required"></textarea>
+
+    </div>
+
+  </div>
+
+
+  <!-- Footer -->
+  <div class="card-footer bg-body border-0 d-flex justify-content-end gap-2">
+
+    <button type="button" (click)="toggleView()" class="btn btn-light border">
+
+      Cancel
+
+    </button>
+
+    <button type="button" class="btn btn-primary d-flex align-items-center gap-2">
+
+      <i class="bi bi-check2"></i>
+
+      Save Purchase
+
+    </button>
 
   </div>
 

@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Server.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ClientsController : BaseApiController
     {
         private readonly IClientsService _clientsService;

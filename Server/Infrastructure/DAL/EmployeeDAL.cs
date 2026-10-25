@@ -81,6 +81,9 @@ namespace Server.Infrastructure.DAL
                 parameters.Add("@email", employee.Email);
                 parameters.Add("@salary", employee.Salary);
                 parameters.Add("@department", employee.DepartmentId);
+                parameters.Add("@gender", employee.Gender);
+                parameters.Add("@mobile", employee.Mobile);
+                parameters.Add("@dob", employee.DOB);
                 parameters.Add("@user", employee.CreatedBy);
                 parameters.Add("@RecordId", employee.RecordId);
 
@@ -105,6 +108,9 @@ namespace Server.Infrastructure.DAL
                 parameters.Add("@email", employee.Email);
                 parameters.Add("@salary", employee.Salary);
                 parameters.Add("@department", employee.DepartmentId);
+                parameters.Add("@gender", employee.Gender);
+                parameters.Add("@mobile", employee.Mobile);
+                parameters.Add("@dob", employee.DOB);
                 parameters.Add("@user", employee.UpdatedBy);
                 parameters.Add("@RecordId", employee.RecordId);
 

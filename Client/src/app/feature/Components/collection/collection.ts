@@ -66,13 +66,14 @@ export class Collection implements OnInit {
       fat: [null],
       snf: [null],
       temperature: [''],
+      milkType: ['', Validators.required],
       rate: [''],
       uom: [null, Validators.required],
       totalAmount: [''],
       paymentStatus: [''],
       paymentMode: [''],
       collectionCenter: ['', Validators.required],
-      description: [''],
+      description: ['Collected milk from farmer'],
       isActive: [true],
       isDeleted: [false]
     });
@@ -224,10 +225,6 @@ export class Collection implements OnInit {
     this.IsDefaultView = !this.IsDefaultView;
   }
 
-  onCancel() {
-    this.toggleIsDefaultView();
-  }
-
   ClearForm() {
     this.DeclareForm();
   }
@@ -265,12 +262,12 @@ export class Collection implements OnInit {
     try {
       let datamodel = this.ConvertFormToModel();
 
-      this.FormHeaderText = "Add Farmer";
-      this.toggleIsDefaultView();
+      this.FormHeaderText = "Add Farmer";      
       
        (await this.collectionsService.InsertData(datamodel)).subscribe({
           next: (res) => {
             if(res == 1) {
+              this.toggleIsDefaultView();
               this.swalService.ShowAlert("success", "Record Inserted Successfully!");
             }
             this.GetData();
@@ -309,35 +306,31 @@ export class Collection implements OnInit {
   }
 
   // method to get collection record data by Id
-  public Edit(recordId: any) {
+  public async Edit(recordId: any) {
     try {
-      this.FormHeaderText = "Edit Colection";
+      this.FormHeaderText = "Edit Collection";
       //this.ButtonText= "Update"; 
-      //this.toggleIsDefaultView();  
       
-      this.clientsService.GetById(recordId).subscribe({
-          next: (res) => {            
-            let response = JSON.parse(JSON.stringify(res))
-            //console.log(response);
-            this.milkCollectionForm.get('recordId')?.setValue(response.recordId);
-            this.milkCollectionForm.get('name')?.setValue(response.name);
-            this.milkCollectionForm.get('clientType')?.setValue(response.clientType);
-            this.milkCollectionForm.get('clientCode')?.setValue(response.clientCode);
-            this.milkCollectionForm.get('email')?.setValue(response.email);
-            this.milkCollectionForm.get('contactPerson')?.setValue(response.contactPerson);
-            this.milkCollectionForm.get('mobile')?.setValue(response.mobile);
-            this.milkCollectionForm.get('category')?.setValue(response.category);
-            this.milkCollectionForm.get('alternateMobile')?.setValue(response.alternateMobile);
-            this.milkCollectionForm.get('address')?.setValue(response.address);
-            this.milkCollectionForm.get('isActive')?.setValue(response.isActive);
-            this.milkCollectionForm.get('isDeleted')?.setValue(response.isDeleted);
-
-            this.toggleIsDefaultView();
-          },
-          error: () => {
-            this.swalService.ShowAlert("error", "");
-          }
-        });
+      const response = await this.collectionsService.GetById(recordId); 
+        response.subscribe({ next: (response: any) => 
+        { 
+          //console.log(response);
+          this.milkCollectionForm.get('recordId')?.setValue(response.recordId);
+          this.milkCollectionForm.get('name')?.setValue(response.name);
+          this.milkCollectionForm.get('clientType')?.setValue(response.clientType);
+          this.milkCollectionForm.get('clientCode')?.setValue(response.clientCode);
+          this.milkCollectionForm.get('email')?.setValue(response.email);
+          this.milkCollectionForm.get('contactPerson')?.setValue(response.contactPerson);
+          this.milkCollectionForm.get('mobile')?.setValue(response.mobile);
+          this.milkCollectionForm.get('category')?.setValue(response.category);
+          this.milkCollectionForm.get('alternateMobile')?.setValue(response.alternateMobile);
+          this.milkCollectionForm.get('address')?.setValue(response.address);
+          this.milkCollectionForm.get('isActive')?.setValue(response.isActive);
+          this.milkCollectionForm.get('isDeleted')?.setValue(response.isDeleted);
+          this.toggleIsDefaultView();
+          this.cdr.detectChanges(); 
+        }
+      });
     }
     catch(err){
       throw err;

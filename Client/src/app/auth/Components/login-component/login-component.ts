@@ -136,13 +136,13 @@ export class LoginComponent {
     this.router.navigate(['/']);
   }
   
-  openSignup () {
-    this.isLoginView = false;
-    this.userConfiguration = {
-      ...this.userConfiguration,
-      isFormHeaderShow: false
-    };
-  }
+  // openSignup () {
+  //   this.isLoginView = false;
+  //   this.userConfiguration = {
+  //     ...this.userConfiguration,
+  //     isFormHeaderShow: false
+  //   };
+  // }
 
   public async GetUserRolesDropdown() {
     try {
